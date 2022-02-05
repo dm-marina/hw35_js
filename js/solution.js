@@ -33,38 +33,52 @@ console.log(li.getAttribute('data-my-name'))
 ul.removeAttribute('data-dog-tail');
 console.log(ul.getAttributeNames());
 
+
 function generateList(arr){
-    let ul = '<ul>\n';
+    const listWrap = document.querySelector('.ulList');
 
-    for(let i=0; i<arr.length; i++){
-        let row = arr[i];
+    function createList(arr){
+        let list = document.createElement('ul');
+        for(let i=0; i<arr.length; i++){
+            const li = document.createElement('li');
 
-        if(Array.isArray(row)){
-            ul+=`<li>`+ `${generateList(row)}`+ `</li>\n`;
+            if(Array.isArray(arr[i])){
+                li.append(createList(arr[i]));
+            }
+            else{
+                li.innerHTML=arr[i];
+            }
+            list.append(li);
         }
-        else{
-            ul+=`<li>`+ `${row}`+`</li>\n`;
-        }
+        return list;
     }
-    ul+='</ul>\n';
-    
-    return ul;
+    listWrap.append(createList(arr));
 }
-console.log(generateList([1,2, 3,[4, 5, 6]]))
+generateList([1,2, 3,[4, 5, 6]]);
 
-function createTable(){
-    let cell = 10;
-    let arr= new Array(cell);
-    
-    for(let i=0; i<cell; i++){
-        arr[i] = new Array(cell)
-        for(let j=0; j<cell; j++){
-            arr[i][j] = i*10+j+1
+function generateTable(){
+    const tableWrap= document.querySelector('.tableList')
+    function createTable(){
+        let cell = 10;
+        let arr = new Array(cell);
+        const table = document.createElement('table');
 
-            document.write(arr[i][j]+' ');
+        for(let i=0; i<10;i++){
+            let tr = document.createElement('tr');
+            table.appendChild(tr);
+
+            for(let j=0;j<10;j++){
+                let td = document.createElement('td');
+                arr[j]=new Array(cell)
+                tr.appendChild(td)
+                for(let k=0;k<cell;k++){
+                    arr[j][k] =i*10+j+1;
+                    td.innerHTML = arr[j][k]
+                }
+            }
         }
-        document.write('</br>');
+        return table;
     }
-
+    tableWrap.append(createTable());
 }
-console.log(createTable());
+generateTable();
